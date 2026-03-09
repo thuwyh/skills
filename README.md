@@ -7,6 +7,7 @@ A collection of reusable [Claude Code](https://claude.ai/code) skills.
 | Skill | Description | Usage |
 |-------|-------------|-------|
 | [brainstorm](./brainstorm/) | Multi-agent brainstorm using De Bono's Six Thinking Hats | `/brainstorm <topic>` |
+| [tweet-from-commit](./tweet-from-commit/) | Generate tweet + LinkedIn post + image prompt from git commits. Anti-AI tone built in. | `/tweet-from-commit [--count N] [--hash SHA]` |
 
 ## What Are Skills?
 
