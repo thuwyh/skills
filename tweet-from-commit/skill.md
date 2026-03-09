@@ -60,7 +60,7 @@ These are HARD rules. Violating any one of them means rewriting from scratch.
 - "leverage", "utilize", "streamline", "optimize" (as buzzwords)
 - "journey", "passion", "mission"
 - Any sentence starting with "I" three times in a row
-- Em dash (—) used more than once
+- ALL dashes used as punctuation — em dash (—), en dash (–), and hyphens (-) used as separators. Rewrite using periods, commas, or restructure the sentence. Compound words with hyphens (e.g., "one-line", "real-time") are fine.
 - "This is why..." as a conclusion
 - "Let that sink in"
 - "Spoiler alert:", "Plot twist:"
@@ -74,7 +74,7 @@ These are HARD rules. Violating any one of them means rewriting from scratch.
 
 ### What Makes Good Builder Content
 
-The best builder posts share a **specific moment** — a bug you found, a number that surprised you, a shortcut you discovered, a mistake you made. They feel like overhearing someone talk at a coffee shop, not reading a blog post.
+The best builder posts share a **specific moment**: a bug you found, a number that surprised you, a shortcut you discovered, a mistake you made. They feel like overhearing someone talk at a coffee shop, not reading a blog post.
 
 ### 5A: Tweet (X/Twitter)
 
@@ -99,7 +99,7 @@ LinkedIn allows more room to tell the story, but do NOT fall into LinkedIn cring
 
 **Structure rules**:
 - 3-8 short paragraphs. Each paragraph 1-2 sentences max.
-- First line is the hook — must work as a standalone line that makes people click "see more". No clickbait, just the interesting part up front.
+- First line is the hook. It must work as a standalone line that makes people click "see more". No clickbait, just the interesting part up front.
 - Tell the story: what happened → what you found → what you did → what you learned.
 - OK to include specific numbers, code snippets (short), or before/after comparisons.
 - End with the takeaway or lesson, stated plainly. Not a motivational quote.
@@ -132,7 +132,7 @@ Generate a prompt for an AI image generator to create a hand-drawn style illustr
 - Style: hand-drawn / sketch / whiteboard style illustration
 - The image should visually explain or diagram the core concept from the post
 - Include short text labels or annotations on the image (like a whiteboard sketch)
-- Keep text on the image to a few key words/numbers — not full sentences
+- Keep text on the image to a few key words/numbers, not full sentences
 - Think: "if someone drew this on a whiteboard to explain the concept to a coworker"
 - Prefer: diagrams, before/after comparisons, simple flowcharts, annotated code snippets
 - Color: limited palette, 2-3 colors max on white/light background
