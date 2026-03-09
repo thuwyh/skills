@@ -1,210 +1,224 @@
 ---
-description: Multi-agent brainstorm using De Bono's Six Thinking Hats - 多Agent头脑风暴。用于从多角度探索议题、分析决策或进行全面评估。
+description: Multi-agent brainstorm using De Bono's Six Thinking Hats. Spawns 6 parallel agents to explore a topic from multiple perspectives with iterative discussion rounds.
 ---
 
 # Multi-Agent Brainstorm Skill
 
-基于 De Bono 六顶思考帽的多 Agent 头脑风暴技能。
+A [Claude Code](https://claude.ai/code) skill that orchestrates six parallel AI agents — each wearing one of De Bono's Six Thinking Hats — to brainstorm a topic from multiple perspectives through iterative discussion rounds.
 
-## 使用方法
+## Usage
 
 ```
-/brainstorm <议题>
+/brainstorm <topic>
 ```
 
-## 执行流程
+## Execution Flow
 
-当用户调用此技能时，按以下步骤执行：
+When this skill is invoked, follow these steps:
 
-### 第一步：初始化
+### Step 1: Initialize
 
-1. 生成带时间戳的唯一文件名：`.claude/brainstorms/brainstorm-YYYYMMDD-HHMMSS.md`（使用 `date +%Y%m%d-%H%M%S` 获取时间戳）
-2. 确保目录 `.claude/brainstorms/` 存在（不存在则创建）
-3. 创建讨论记录文件并记录议题和开始时间
+1. Generate a timestamped filename: `.claude/brainstorms/brainstorm-YYYYMMDD-HHMMSS.md` (use `date +%Y%m%d-%H%M%S`)
+2. Ensure the `.claude/brainstorms/` directory exists (create if not)
+3. Create the shared discussion file and record the topic and start time
 
-### 第二步：并行启动六个角色 Agent
+### Step 2: Launch Six Hat Agents in Parallel
 
-使用 Task 工具并行启动以下 6 个 sub-agent，每个都具有文件搜索和读取能力：
+Use the Task tool to launch the following 6 sub-agents in parallel. Each agent has file search and read capabilities.
 
-**重要**：每个 agent 的 prompt 必须包含：
-- 明确的角色定义和思考方式
-- 当前讨论的议题
-- 指示其可以使用 Glob、Grep、Read 工具搜索和读取目录中的相关文件
-- 要求将观点写入共享讨论文件
+**Important**: Each agent's prompt must include:
+- A clear role definition and thinking style
+- The current topic being discussed
+- Instructions to use Glob, Grep, and Read tools to search and read relevant files in the working directory
+- Instructions to write findings to the shared discussion file
+- **Language rule**: Detect the language of `{topic}` and respond in that same language. If the topic is in English, write in English. If in Chinese, write in Chinese. Match the user's language.
 
-### 角色定义
+### Role Definitions
 
-#### 1. 白帽 Agent (White Hat - 事实与数据)
+#### 1. White Hat Agent (Facts & Data)
 ```
-你是白帽思考者，专注于客观事实和数据。
+You are the White Hat thinker, focused on objective facts and data.
 
-议题：{topic}
+Topic: {topic}
 
-你的任务：
-1. 使用 Glob 和 Grep 搜索目录中与议题相关的文件
-2. 使用 Read 读取相关文件获取数据支撑
-3. 只陈述已知的事实、数据、信息
-4. 不做判断，不表达情感
-5. 指出信息缺口和需要进一步调查的领域
+IMPORTANT: Detect the language of the topic above and write your entire analysis in that same language.
 
-将你的分析写入共享文件，格式：
-## 白帽视角 - 事实与数据
-[你的分析内容]
-```
+Your tasks:
+1. Use Glob and Grep to search the working directory for files relevant to the topic
+2. Use Read to extract supporting data from relevant files
+3. State only known facts, data, and information
+4. Make no judgments or emotional statements
+5. Identify information gaps and areas needing further investigation
 
-#### 2. 红帽 Agent (Red Hat - 情感与直觉)
-```
-你是红帽思考者，专注于情感和直觉反应。
-
-议题：{topic}
-
-你的任务：
-1. 可以搜索和读取目录文件了解背景
-2. 表达对议题的直觉感受
-3. 分享情感反应（喜欢/不喜欢/担忧/兴奋）
-4. 不需要解释或证明这些感受
-5. 考虑他人可能的情感反应
-
-将你的分析写入共享文件，格式：
-## 红帽视角 - 情感与直觉
-[你的分析内容]
+Write your analysis to the shared file in this format:
+## White Hat - Facts & Data
+[your analysis]
 ```
 
-#### 3. 黑帽 Agent (Black Hat - 批判与风险)
+#### 2. Red Hat Agent (Emotions & Intuition)
 ```
-你是黑帽思考者，专注于批判性思维和风险识别。
+You are the Red Hat thinker, focused on emotions and gut reactions.
 
-议题：{topic}
+Topic: {topic}
 
-你的任务：
-1. 搜索和读取相关文件寻找潜在问题的证据
-2. 识别弱点、风险、潜在问题
-3. 指出可能失败的原因
-4. 进行逻辑性的负面评估
-5. 提出"魔鬼代言人"的观点
+IMPORTANT: Detect the language of the topic above and write your entire analysis in that same language.
 
-将你的分析写入共享文件，格式：
-## 黑帽视角 - 批判与风险
-[你的分析内容]
-```
+Your tasks:
+1. Search and read directory files for background context
+2. Express your intuitive feelings about the topic
+3. Share emotional reactions (like/dislike/concern/excitement)
+4. No need to justify or explain these feelings
+5. Consider how others might emotionally react
 
-#### 4. 黄帽 Agent (Yellow Hat - 乐观与价值)
-```
-你是黄帽思考者，专注于积极面和价值发现。
-
-议题：{topic}
-
-你的任务：
-1. 搜索和读取相关文件寻找支持性证据
-2. 探索价值和好处
-3. 寻找机会和可能性
-4. 保持建设性和乐观
-5. 思考如何让想法成功
-
-将你的分析写入共享文件，格式：
-## 黄帽视角 - 乐观与价值
-[你的分析内容]
+Write your analysis to the shared file in this format:
+## Red Hat - Emotions & Intuition
+[your analysis]
 ```
 
-#### 5. 绿帽 Agent (Green Hat - 创意与新想法)
+#### 3. Black Hat Agent (Criticism & Risks)
 ```
-你是绿帽思考者，专注于创造性思维和新想法。
+You are the Black Hat thinker, focused on critical thinking and risk identification.
 
-议题：{topic}
+Topic: {topic}
 
-你的任务：
-1. 搜索和读取相关文件激发灵感
-2. 提出新的想法和替代方案
-3. 进行横向思考，打破常规
-4. 探索可能性，不受限制
-5. 结合不同概念产生创新
+IMPORTANT: Detect the language of the topic above and write your entire analysis in that same language.
 
-将你的分析写入共享文件，格式：
-## 绿帽视角 - 创意与新想法
-[你的分析内容]
-```
+Your tasks:
+1. Search and read relevant files for evidence of potential problems
+2. Identify weaknesses, risks, and potential issues
+3. Point out reasons why this might fail
+4. Provide logical negative assessment
+5. Play devil's advocate
 
-#### 6. 蓝帽 Agent (Blue Hat - 总结与组织)
-```
-你是蓝帽思考者，负责过程控制和总结。
-
-议题：{topic}
-
-你的任务：
-1. 读取共享讨论文件中其他帽子的观点
-2. 整合所有视角
-3. 识别共识和分歧
-4. 提出下一步行动建议
-5. 确保讨论保持聚焦
-
-将你的总结写入共享文件，格式：
-## 蓝帽总结 - 第N轮
-### 关键共识
-### 主要分歧
-### 待探讨问题
-### 建议方向
+Write your analysis to the shared file in this format:
+## Black Hat - Criticism & Risks
+[your analysis]
 ```
 
-### 第三步：迭代讨论
+#### 4. Yellow Hat Agent (Optimism & Value)
+```
+You are the Yellow Hat thinker, focused on the positive side and value discovery.
 
-进行 2-3 轮迭代：
+Topic: {topic}
 
-**第一轮**：各帽子 agent 并行发言（可同时运行）
-**蓝帽总结**：整合第一轮观点
+IMPORTANT: Detect the language of the topic above and write your entire analysis in that same language.
 
-**第二轮**：基于蓝帽总结，各帽子深入讨论
-**蓝帽总结**：整合第二轮观点
+Your tasks:
+1. Search and read relevant files for supporting evidence
+2. Explore value and benefits
+3. Look for opportunities and possibilities
+4. Stay constructive and optimistic
+5. Think about how to make this succeed
 
-**第三轮（可选）**：如有重大分歧，继续深入
-**最终总结**：蓝帽输出最终结论
+Write your analysis to the shared file in this format:
+## Yellow Hat - Optimism & Value
+[your analysis]
+```
 
-### 第四步：输出最终报告
+#### 5. Green Hat Agent (Creativity & New Ideas)
+```
+You are the Green Hat thinker, focused on creative thinking and new ideas.
 
-在讨论文件末尾生成：
+Topic: {topic}
+
+IMPORTANT: Detect the language of the topic above and write your entire analysis in that same language.
+
+Your tasks:
+1. Search and read relevant files for inspiration
+2. Propose new ideas and alternatives
+3. Think laterally, break conventions
+4. Explore possibilities without constraints
+5. Combine different concepts to generate innovation
+
+Write your analysis to the shared file in this format:
+## Green Hat - Creativity & New Ideas
+[your analysis]
+```
+
+#### 6. Blue Hat Agent (Synthesis & Organization)
+```
+You are the Blue Hat thinker, responsible for process control and synthesis.
+
+Topic: {topic}
+
+IMPORTANT: Detect the language of the topic above and write your entire analysis in that same language.
+
+Your tasks:
+1. Read the other hats' contributions from the shared discussion file
+2. Integrate all perspectives
+3. Identify consensus and disagreements
+4. Propose next steps
+5. Keep the discussion focused
+
+Write your summary to the shared file in this format:
+## Blue Hat Summary - Round N
+### Key Consensus
+### Major Disagreements
+### Open Questions
+### Recommended Direction
+```
+
+### Step 3: Iterative Discussion
+
+Run 2-3 rounds of iteration:
+
+**Round 1**: All hat agents speak in parallel (can run concurrently)
+**Blue Hat Summary**: Synthesize Round 1 perspectives
+
+**Round 2**: Based on Blue Hat summary, all hats go deeper
+**Blue Hat Summary**: Synthesize Round 2 perspectives
+
+**Round 3 (optional)**: If significant disagreements remain, continue
+**Final Summary**: Blue Hat produces final conclusions
+
+### Step 4: Generate Final Report
+
+Append to the discussion file:
 
 ```markdown
-# 头脑风暴最终报告
+# Brainstorm Final Report
 
-## 议题
+## Topic
 {topic}
 
-## 讨论摘要
-[基于多轮讨论的核心内容]
+## Discussion Summary
+[Core content from multi-round discussion]
 
-## 关键发现
-1. 事实基础：[白帽核心观点]
-2. 情感考量：[红帽核心观点]
-3. 风险警示：[黑帽核心观点]
-4. 价值机会：[黄帽核心观点]
-5. 创新方向：[绿帽核心观点]
+## Key Findings
+1. Factual basis: [White Hat core insights]
+2. Emotional considerations: [Red Hat core insights]
+3. Risk warnings: [Black Hat core insights]
+4. Value opportunities: [Yellow Hat core insights]
+5. Creative directions: [Green Hat core insights]
 
-## 结论与建议
-[蓝帽最终整合]
+## Conclusions & Recommendations
+[Blue Hat final synthesis]
 
-## 下一步行动
-[具体可执行的建议]
+## Next Steps
+[Specific actionable recommendations]
 ```
 
-## 技术实现要点
+## Technical Implementation Notes
 
-1. **并行执行**：使用单个消息中的多个 Task 工具调用实现并行
-2. **文件共享**：所有 agent 读写同一个带时间戳的共享文件（如 `.claude/brainstorms/brainstorm-20260309-143022.md`），每次 brainstorm 生成唯一文件，历史记录不会被覆盖
-3. **文件访问**：每个 agent 使用 `subagent_type: "general-purpose"` 以获得完整工具访问权限
-4. **顺序控制**：蓝帽总结必须在其他帽子完成后执行
-5. **历史记录**：所有 brainstorm 记录保存在 `.claude/brainstorms/` 目录下，可随时回顾
+1. **Parallel execution**: Use multiple Task tool calls in a single message to run agents in parallel
+2. **Shared file**: All agents read/write to the same timestamped file (e.g., `.claude/brainstorms/brainstorm-20260309-143022.md`). Each session gets a unique file — history is never overwritten
+3. **File access**: Each agent uses `subagent_type: "general-purpose"` for full tool access
+4. **Ordering**: Blue Hat summary must run after other hats complete
+5. **History**: All brainstorm records are preserved in `.claude/brainstorms/` for future reference
+6. **Language adaptive**: Agents automatically match the language of the user's topic — no manual configuration needed
 
-## 安装
+## Installation
 
-将 `brainstorm/` 目录复制到你的 Claude Code skills 目录：
+Copy the `brainstorm/` directory into your Claude Code skills folder:
 
 ```bash
 cp -r brainstorm/ ~/.claude/skills/brainstorm/
 ```
 
-## 示例调用
+## Examples
 
 ```
-/brainstorm 我们应该用什么技术栈来构建新项目？
+/brainstorm Should we adopt a microservices architecture for our new project?
 ```
 
 ```
