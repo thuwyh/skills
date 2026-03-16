@@ -8,6 +8,7 @@ A collection of reusable [Claude Code](https://claude.ai/code) skills.
 |-------|-------------|-------|
 | [brainstorm](./brainstorm/) | Multi-agent brainstorm using De Bono's Six Thinking Hats | `/brainstorm <topic>` |
 | [tweet-from-commit](./tweet-from-commit/) | Generate tweet + LinkedIn post + image prompt from git commits. Anti-AI tone built in. | `/tweet-from-commit [--count N] [--hash SHA]` |
+| [xiaohongshu-image-prompts](./xiaohongshu-image-prompts/) | Turn technical content into Xiaohongshu knowledge card posts with AI image generation prompts. | `/xiaohongshu-image-prompts` |
 
 ## What Are Skills?
 
